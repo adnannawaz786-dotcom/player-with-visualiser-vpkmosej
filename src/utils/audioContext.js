@@ -1,4 +1,3 @@
-```javascript
 // Web Audio API setup and analyzer utilities
 let audioContext = null;
 let analyser = null;
@@ -265,4 +264,3 @@ export const resumeAudioContext = async () => {
 export const getAudioContext = () => audioContext;
 export const getAnalyser = () => analyser;
 export const getGainNode = () => gainNode;
-```
