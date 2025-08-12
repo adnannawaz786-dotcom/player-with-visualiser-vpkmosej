@@ -1,4 +1,3 @@
-```jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AudioPlayer from './components/AudioPlayer';
@@ -245,4 +244,3 @@ const App = () => {
 };
 
 export default App;
-```
