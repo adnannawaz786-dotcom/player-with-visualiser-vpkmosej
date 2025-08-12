@@ -1,4 +1,3 @@
-```javascript
 // Audio sample configuration and player settings
 // Contains demo tracks, player configuration, and audio processing settings
 
@@ -218,4 +217,3 @@ export default {
   audioUtils,
   visualizerThemes
 };
-```
