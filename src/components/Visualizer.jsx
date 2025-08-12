@@ -1,4 +1,4 @@
-```jsx
+
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 
@@ -322,6 +322,5 @@ const Visualizer = ({
     </motion.div>
   );
 };
-
 export default Visualizer;
 ```
