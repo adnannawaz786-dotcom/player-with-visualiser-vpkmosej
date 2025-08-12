@@ -398,4 +398,3 @@ const AudioPlayer = ({ onAudioAnalyzer }) => {
 };
 
 export default AudioPlayer;
-```
