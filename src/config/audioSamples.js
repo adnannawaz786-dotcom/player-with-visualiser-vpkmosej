@@ -7,7 +7,7 @@ export const audioSamples = [
     title: "Ethereal Dreams",
     artist: "Digital Harmony",
     duration: "3:45",
-    url: "https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3",
+    url: "https://pub-a4a7ff546cda456c97a2cf017c996af6.r2.dev/1a3fdb3c-b58f-4eea-9053-8e7e0f9f302e_Eesah_Junior_Dread_Little_Lion_Sound_808_Delavega_-_Rise_My_People_Official_Audio.mp3",
     cover: "https://via.placeholder.com/300x300/667eea/ffffff?text=Ethereal+Dreams",
     genre: "Ambient",
     year: 2024
@@ -17,7 +17,7 @@ export const audioSamples = [
     title: "Neon Nights",
     artist: "Synthwave Collective",
     duration: "4:12",
-    url: "https://www.soundjay.com/misc/sounds/fail-buzzer-02.mp3",
+    url: "https://pub-a4a7ff546cda456c97a2cf017c996af6.r2.dev/b5646358-1fb6-4685-834b-b4aba17f453e_2Pac_-_Broken_Oaths_ft_DMX_2025.mp3",
     cover: "https://via.placeholder.com/300x300/764ba2/ffffff?text=Neon+Nights",
     genre: "Synthwave",
     year: 2024
@@ -27,7 +27,7 @@ export const audioSamples = [
     title: "Ocean Waves",
     artist: "Nature Sounds",
     duration: "5:30",
-    url: "https://www.soundjay.com/misc/sounds/magic-chime-02.mp3",
+    url: "https://pub-a4a7ff546cda456c97a2cf017c996af6.r2.dev/1faf6891-f33b-4722-b124-2eff7da0d7cf_2Pac_-_Real_Talk_ft_Outlawz_2025_Young_Noble_Hussein_Fatal_Yaki_Kadafi.mp3",
     cover: "https://via.placeholder.com/300x300/667eea/ffffff?text=Ocean+Waves",
     genre: "Nature",
     year: 2024
@@ -37,7 +37,7 @@ export const audioSamples = [
     title: "Urban Pulse",
     artist: "City Beats",
     duration: "3:28",
-    url: "https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3",
+    url: "https://pub-a4a7ff546cda456c97a2cf017c996af6.r2.dev/d9df99ae-451d-4ab7-9e0e-5df1bb55442a_Chezidek_-_Dubplate_-_Little_Lion_Sound_-_Next_Episode_Official_Audio.mp3",
     cover: "https://via.placeholder.com/300x300/f093fb/ffffff?text=Urban+Pulse",
     genre: "Electronic",
     year: 2024
@@ -47,7 +47,7 @@ export const audioSamples = [
     title: "Cosmic Journey",
     artist: "Space Explorers",
     duration: "6:15",
-    url: "https://www.soundjay.com/misc/sounds/magic-chime-02.mp3",
+    url: "https://pub-a4a7ff546cda456c97a2cf017c996af6.r2.dev/d9df99ae-451d-4ab7-9e0e-5df1bb55442a_Chezidek_-_Dubplate_-_Little_Lion_Sound_-_Next_Episode_Official_Audio.mp3",
     cover: "https://via.placeholder.com/300x300/4facfe/ffffff?text=Cosmic+Journey",
     genre: "Ambient",
     year: 2024
