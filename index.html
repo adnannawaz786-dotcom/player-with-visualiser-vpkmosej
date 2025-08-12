@@ -1,0 +1,174 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Player with Visualiser</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="/src/main.jsx" as="script" />
+    
+    <!-- Meta tags for SEO and social sharing -->
+    <meta name="description" content="Modern MP3 player with audio visualizer and glassmorphism design" />
+    <meta name="keywords" content="music player, audio visualizer, mp3 player, glassmorphism" />
+    <meta name="author" content="Player with Visualiser" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Player with Visualiser" />
+    <meta property="og:description" content="Modern MP3 player with audio visualizer and glassmorphism design" />
+    <meta property="og:image" content="/og-image.jpg" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content="Player with Visualiser" />
+    <meta property="twitter:description" content="Modern MP3 player with audio visualizer and glassmorphism design" />
+    <meta property="twitter:image" content="/og-image.jpg" />
+    
+    <!-- Theme color for mobile browsers -->
+    <meta name="theme-color" content="#1e1b4b" />
+    <meta name="msapplication-TileColor" content="#1e1b4b" />
+    
+    <!-- Favicon variations -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    
+    <!-- Prevent FOUC (Flash of Unstyled Content) -->
+    <style>
+      html {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+      }
+      
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background: transparent;
+        min-height: 100vh;
+      }
+      
+      #root {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      /* Loading spinner styles */
+      .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(255, 255, 255, 0.2);
+        border-left: 4px solid #ffffff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 20px auto;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      /* Hide scrollbar but keep functionality */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      
+      ::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+      }
+      
+      ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 3px;
+      }
+      
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.5);
+      }
+      
+      /* Accessibility improvements */
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+      
+      /* High contrast mode support */
+      @media (prefers-contrast: high) {
+        body {
+          background: #000000;
+          color: #ffffff;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Main application container -->
+    <div id="root">
+      <!-- Fallback content for when JavaScript is disabled -->
+      <noscript>
+        <div style="text-align: center; color: white; padding: 20px;">
+          <h2>JavaScript Required</h2>
+          <p>This application requires JavaScript to run. Please enable JavaScript in your browser settings.</p>
+        </div>
+      </noscript>
+      
+      <!-- Loading indicator -->
+      <div class="loading-spinner" id="initial-loader"></div>
+    </div>
+    
+    <!-- Main React application script -->
+    <script type="module" src="/src/main.jsx"></script>
+    
+    <!-- Service worker registration for PWA functionality -->
+    <script>
+      // Remove loading spinner once app loads
+      window.addEventListener('load', () => {
+        const loader = document.getElementById('initial-loader');
+        if (loader) {
+          loader.style.display = 'none';
+        }
+      });
+      
+      // Register service worker for offline functionality
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('SW registered: ', registration);
+            })
+            .catch((registrationError) => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+      
+      // Error handling for unhandled JavaScript errors
+      window.addEventListener('error', (event) => {
+        console.error('Global error:', event.error);
+        // Could send error to analytics service here
+      });
+      
+      // Handle unhandled promise rejections
+      window.addEventListener('unhandledrejection', (event) => {
+        console.error('Unhandled promise rejection:', event.reason);
+        // Could send error to analytics service here
+      });
+    </script>
+  </body>
+</html>
+```
