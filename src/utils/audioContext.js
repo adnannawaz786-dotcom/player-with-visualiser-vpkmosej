@@ -12,29 +12,24 @@ let gainNode = null;
  */
 export const initializeAudioContext = (audioElement) => {
   try {
-    // Create audio context if it doesn't exist
     if (!audioContext) {
       audioContext = new (window.AudioContext || window.webkitAudioContext)();
     }
 
-    // Resume context if suspended (required for user interaction)
     if (audioContext.state === 'suspended') {
       audioContext.resume();
     }
 
-    // Create analyzer node
     if (!analyser) {
       analyser = audioContext.createAnalyser();
-      analyser.fftSize = 256; // Higher values = more frequency data
-      analyser.smoothingTimeConstant = 0.8; // Smoothing between frames
+      analyser.fftSize = 256;
+      analyser.smoothingTimeConstant = 0.8;
     }
 
-    // Create gain node for volume control
     if (!gainNode) {
       gainNode = audioContext.createGain();
     }
 
-    // Connect audio element to analyzer if not already connected
     if (!source && audioElement) {
       source = audioContext.createMediaElementSource(audioElement);
       source.connect(analyser);
@@ -42,7 +37,6 @@ export const initializeAudioContext = (audioElement) => {
       gainNode.connect(audioContext.destination);
     }
 
-    // Initialize data array for frequency data
     const bufferLength = analyser.frequencyBinCount;
     dataArray = new Uint8Array(bufferLength);
 
@@ -67,14 +61,39 @@ export const initializeAudioContext = (audioElement) => {
 };
 
 /**
- * Get current frequency data for visualization
- * @returns {Uint8Array|null} Frequency data array
+ * Connect an audio element to the analyser
+ * @param {HTMLAudioElement} audioElement - The audio element to connect
+ * @returns {AnalyserNode} The connected analyser node
  */
-export const getFrequencyData = () => {
-  if (!analyser || !dataArray) {
-    return null;
+export const connectAnalyzer = (audioElement) => {
+  if (!audioContext) {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
   }
 
+  if (!analyser) {
+    analyser = audioContext.createAnalyser();
+    analyser.fftSize = 256;
+    analyser.smoothingTimeConstant = 0.8;
+  }
+
+  if (!gainNode) {
+    gainNode = audioContext.createGain();
+  }
+
+  const newSource = audioContext.createMediaElementSource(audioElement);
+  newSource.connect(analyser);
+  analyser.connect(gainNode);
+  gainNode.connect(audioContext.destination);
+
+  source = newSource;
+  return analyser;
+};
+
+/**
+ * Get current frequency data for visualization
+ */
+export const getFrequencyData = () => {
+  if (!analyser || !dataArray) return null;
   try {
     analyser.getByteFrequencyData(dataArray);
     return dataArray;
@@ -86,13 +105,9 @@ export const getFrequencyData = () => {
 
 /**
  * Get current time domain data (waveform)
- * @returns {Uint8Array|null} Time domain data array
  */
 export const getTimeDomainData = () => {
-  if (!analyser || !dataArray) {
-    return null;
-  }
-
+  if (!analyser || !dataArray) return null;
   try {
     analyser.getByteTimeDomainData(dataArray);
     return dataArray;
@@ -104,14 +119,12 @@ export const getTimeDomainData = () => {
 
 /**
  * Set the volume using gain node
- * @param {number} volume - Volume level (0.0 to 1.0)
  */
 export const setVolume = (volume) => {
   if (!gainNode) {
     console.warn('Gain node not initialized');
     return;
   }
-
   try {
     const clampedVolume = Math.max(0, Math.min(1, volume));
     gainNode.gain.setValueAtTime(clampedVolume, audioContext.currentTime);
@@ -122,75 +135,54 @@ export const setVolume = (volume) => {
 
 /**
  * Get average frequency for beat detection
- * @returns {number} Average frequency value (0-255)
  */
 export const getAverageFrequency = () => {
   const frequencyData = getFrequencyData();
   if (!frequencyData) return 0;
-
   let sum = 0;
-  for (let i = 0; i < frequencyData.length; i++) {
-    sum += frequencyData[i];
-  }
+  for (let i = 0; i < frequencyData.length; i++) sum += frequencyData[i];
   return sum / frequencyData.length;
 };
 
 /**
  * Get bass frequencies (low-end spectrum)
- * @returns {number} Average bass frequency value
  */
 export const getBassFrequency = () => {
   const frequencyData = getFrequencyData();
   if (!frequencyData) return 0;
-
-  // Bass frequencies are typically in the first 1/8 of the spectrum
   const bassRange = Math.floor(frequencyData.length / 8);
   let sum = 0;
-  for (let i = 0; i < bassRange; i++) {
-    sum += frequencyData[i];
-  }
+  for (let i = 0; i < bassRange; i++) sum += frequencyData[i];
   return sum / bassRange;
 };
 
 /**
  * Get mid frequencies
- * @returns {number} Average mid frequency value
  */
 export const getMidFrequency = () => {
   const frequencyData = getFrequencyData();
   if (!frequencyData) return 0;
-
-  // Mid frequencies are in the middle portion of the spectrum
   const start = Math.floor(frequencyData.length / 8);
   const end = Math.floor(frequencyData.length * 5 / 8);
   let sum = 0;
-  for (let i = start; i < end; i++) {
-    sum += frequencyData[i];
-  }
+  for (let i = start; i < end; i++) sum += frequencyData[i];
   return sum / (end - start);
 };
 
 /**
  * Get treble frequencies (high-end spectrum)
- * @returns {number} Average treble frequency value
  */
 export const getTrebleFrequency = () => {
   const frequencyData = getFrequencyData();
   if (!frequencyData) return 0;
-
-  // Treble frequencies are in the last 3/8 of the spectrum
   const start = Math.floor(frequencyData.length * 5 / 8);
   let sum = 0;
-  for (let i = start; i < frequencyData.length; i++) {
-    sum += frequencyData[i];
-  }
+  for (let i = start; i < frequencyData.length; i++) sum += frequencyData[i];
   return sum / (frequencyData.length - start);
 };
 
 /**
  * Detect beats based on frequency analysis
- * @param {number} threshold - Beat detection threshold (0-255)
- * @returns {boolean} Whether a beat is detected
  */
 export const detectBeat = (threshold = 200) => {
   const bassLevel = getBassFrequency();
@@ -206,22 +198,18 @@ export const cleanupAudioContext = async () => {
       source.disconnect();
       source = null;
     }
-    
     if (analyser) {
       analyser.disconnect();
       analyser = null;
     }
-    
     if (gainNode) {
       gainNode.disconnect();
       gainNode = null;
     }
-    
     if (audioContext && audioContext.state !== 'closed') {
       await audioContext.close();
       audioContext = null;
     }
-    
     dataArray = null;
   } catch (error) {
     console.error('Error cleaning up audio context:', error);
@@ -230,22 +218,18 @@ export const cleanupAudioContext = async () => {
 
 /**
  * Check if audio context is supported
- * @returns {boolean} Whether Web Audio API is supported
  */
-export const isAudioContextSupported = () => {
-  return !!(window.AudioContext || window.webkitAudioContext);
-};
+export const isAudioContextSupported = () =>
+  !!(window.AudioContext || window.webkitAudioContext);
 
 /**
  * Get audio context state
- * @returns {string} Current audio context state
  */
-export const getAudioContextState = () => {
-  return audioContext ? audioContext.state : 'not-initialized';
-};
+export const getAudioContextState = () =>
+  audioContext ? audioContext.state : 'not-initialized';
 
 /**
- * Resume audio context (required after user interaction)
+ * Resume audio context
  */
 export const resumeAudioContext = async () => {
   if (audioContext && audioContext.state === 'suspended') {
@@ -260,7 +244,6 @@ export const resumeAudioContext = async () => {
   return true;
 };
 
-// Export audio context instance for direct access if needed
 export const getAudioContext = () => audioContext;
 export const getAnalyser = () => analyser;
 export const getGainNode = () => gainNode;
