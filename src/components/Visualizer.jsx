@@ -322,5 +322,5 @@ const Visualizer = ({
     </motion.div>
   );
 };
+
 export default Visualizer;
-```
